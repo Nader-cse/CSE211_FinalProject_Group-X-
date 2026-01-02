@@ -55,3 +55,37 @@ if (eventsContainer) {
     eventsContainer.appendChild(card);
   });
 }
+
+const registrationForm = document.getElementById("registration-form");
+
+if (registrationForm) {
+  registrationForm.addEventListener("submit", function (event) {
+    event.preventDefault();
+
+    const fullName = document.getElementById("full-name").value.trim();
+    const email = document.getElementById("email").value.trim();
+    const phone = document.getElementById("phone").value.trim();
+    const selectedEvent = document.getElementById("event-select").value;
+
+    if (
+      fullName === "" ||
+      email === "" ||
+      phone === "" ||
+      selectedEvent === ""
+    ) {
+      alert("Please fill all fields");
+      return;
+    }
+
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if (!emailPattern.test(email)) {
+      alert("Please enter a valid email address");
+      return;
+    }
+
+    alert("Registration successful!");
+
+    registrationForm.reset();
+  });
+}
