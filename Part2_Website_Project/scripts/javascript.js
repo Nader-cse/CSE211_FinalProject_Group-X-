@@ -1,8 +1,5 @@
 "use strict";
 
-/* ===============================
-   EVENT MANAGER CLASS
-================================ */
 class EventManager {
   constructor(containerId) {
     this.container = document.getElementById(containerId);
@@ -11,10 +8,7 @@ class EventManager {
       { name: "Music Festival", date: "2026-03-10", location: "Alexandria", price: 800 },
       { name: "Startup Meetup", date: "2026-01-25", location: "Giza", price: 300 }
     ];
-
-    if (this.container) {
-      this.renderEvents(this.events);
-    }
+    if (this.container) this.renderEvents(this.events);
   }
 
   renderEvents(eventsList) {
@@ -40,48 +34,32 @@ class EventManager {
   }
 }
 
-/* ===============================
-   BUDGET CALCULATOR CLASS
-================================ */
 class BudgetCalculator {
   constructor(formId) {
     this.form = document.getElementById(formId);
-
-    if (this.form) {
-      this.form.addEventListener("submit", this.calculate.bind(this));
-    }
+    if (this.form) this.form.addEventListener("submit", this.calculate.bind(this));
   }
 
   calculate(event) {
     event.preventDefault();
-
     const ticketPrice = Number(document.getElementById("tickets").value);
     const quantity = Number(document.getElementById("quantity").value);
     const travel = Number(document.getElementById("travel").value);
     const accommodation = Number(document.getElementById("accommodation").value);
-
     const total = (ticketPrice * quantity) + travel + accommodation;
     document.getElementById("total-cost").textContent = total.toFixed(2);
-
     document.dispatchEvent(new CustomEvent("budgetCalculated", { detail: total }));
   }
 }
 
-/* ===============================
-   REGISTRATION FORM CLASS
-================================ */
 class RegistrationForm {
   constructor(formId) {
     this.form = document.getElementById(formId);
-
-    if (this.form) {
-      this.form.addEventListener("submit", this.validate.bind(this));
-    }
+    if (this.form) this.form.addEventListener("submit", this.validate.bind(this));
   }
 
   validate(event) {
     event.preventDefault();
-
     const name = document.getElementById("full-name").value.trim();
     const email = document.getElementById("email").value.trim();
     const phone = document.getElementById("phone").value.trim();
@@ -98,23 +76,22 @@ class RegistrationForm {
       return;
     }
 
-    alert("Registration successful!");
-    this.form.reset();
+    const phonePattern = /^[0-9]{10}$/;
+    if (!phonePattern.test(phone)) {
+      alert("Phone number must be 10 digits");
+      return;
+    }
 
+    this.form.reset();
     document.dispatchEvent(new Event("userRegistered"));
+    window.location.href = this.form.action;
   }
 }
 
-/* ===============================
-   PARALLAX CONTROLLER
-================================ */
 class ParallaxController {
   constructor(selector) {
     this.section = document.querySelector(selector);
-
-    if (this.section) {
-      window.addEventListener("scroll", this.handleScroll.bind(this));
-    }
+    if (this.section) window.addEventListener("scroll", this.handleScroll.bind(this));
   }
 
   handleScroll() {
@@ -123,30 +100,21 @@ class ParallaxController {
   }
 }
 
-/* ===============================
-   SLIDING FORM CONTROLLER
-================================ */
 class SlidingForm {
   constructor(buttonId, formSelector) {
     this.button = document.getElementById(buttonId);
     this.form = document.querySelector(formSelector);
-
     if (this.button && this.form) {
-      this.button.addEventListener("click", () => {
-        this.form.classList.toggle("active");
-      });
+      this.button.addEventListener("click", () => this.form.classList.toggle("active"));
     }
   }
 }
 
-/* ===============================
-   APP INITIALIZATION
-================================ */
 document.addEventListener("DOMContentLoaded", () => {
-  const eventManager = new EventManager("upcoming-events");
-  const budgetCalculator = new BudgetCalculator("budget-form");
-  const registrationForm = new RegistrationForm("registration-form");
-  const parallax = new ParallaxController(".hero");
+  new EventManager("upcoming-events");
+  new BudgetCalculator("budget-form");
+  new RegistrationForm("registration-form");
+  new ParallaxController(".hero");
 
   document.addEventListener("budgetCalculated", e => {
     console.log("Budget Calculated:", e.detail);
