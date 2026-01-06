@@ -120,6 +120,19 @@ document.addEventListener("DOMContentLoaded", () => {
   new BudgetCalculator("budget-form");
   new RegistrationForm("registration-form");
   new ParallaxController(".hero");
+  const eventMgr = new EventManager("upcoming-events");
+  const filterForm = document.getElementById("filter-form");
+  if (filterForm) {
+    filterForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const keyword = document.getElementById("search-name").value;
+      eventMgr.filterEvents(keyword);
+    });
+  }
+  new BudgetCalculator("budget-form");
+  new RegistrationForm("registration-form");
+
+
 
   document.addEventListener("budgetCalculated", e => {
     console.log("Budget Calculated:", e.detail);
